@@ -44,10 +44,10 @@ const getStreams = async (products) => {
             total: 0,
             isFree: 0,
             isNotFree: 0,
-            isFreeAndEmpty: 0,
-            isFreeAndNotEmpty: 0,
             isFreeAndNotEmptyAndActive: 0,
             isFreeAndNotEmptyAndNotActive: 0,
+            isFreeAndEmpty: 0,
+            isFreeAndNotEmpty: 0,
         }
 
         const recentMessage = x => new Promise(resolve => setTimeout(async () => {

@@ -1,22 +1,15 @@
 {
   "name": "streamr-growth-stream",
   "description": "Growth of the Streamr Marketplace",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "main": "index.js",
   "license": "MIT",
   "private": true,
   "scripts": {
     "start": "node index.js"
   },
-  "devDependencies": {
-    "dotenv": "^8.2.0"
-  },
-  "keywords": [
-    "streamr",
-    "metrics"
-  ],
-  "author": {
-    "name": "Sergej Müller",
-    "url": "https://sergejmueller.github.io"
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "streamr-client": "^5.4.1"
   }
 }

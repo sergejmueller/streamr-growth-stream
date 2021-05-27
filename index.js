@@ -1,5 +1,6 @@
 require('dotenv').config()
 const https = require('https')
+const streamr = require('streamr-client')
 
 const getRemoteJson = async url => {
     return new Promise((resolve, reject) => {
@@ -87,31 +88,26 @@ const getStreams = async (products) => {
 }
 
 const publishStreamEvent = async (streamId, data) => {
-    return new Promise((resolve, reject) => {
-        const body = JSON.stringify(data)
-        const sessionToken = process.env['STREAMR_SESSION_TOKEN']
+    return new Promise( (resolve, reject) => {
+        if (!process.env['STREAMR_PRIVATE_KEY']) {
+            reject(new Error('Streamr Private Key is required'))
+        }
 
-        https.request({
-            host: 'streamr.network',
-            path: `/api/v1/streams/${encodeURIComponent(streamId)}/data`,
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Content-Length': Buffer.byteLength(body),
-                'Authorization': `Bearer ${sessionToken}`,
+        const client = new streamr({
+            auth: {
+                privateKey: process.env['STREAMR_PRIVATE_KEY']
             }
-        }, response => {
-            let body = ''
+        })
 
-            response.on('data', chunk => body += chunk)
-            response.on('end', () => resolve(body))
-        }).on('error', (error) => {
-            reject(new Error(`Fetch error: ${error}`))
-        }).end(body)
+        client.publish(streamId, data)
+            .then(() => resolve(data))
+            .catch(error => reject(error))
     })
 }
 
 (async () => {
+    console.log('... ', new Date().toLocaleString());
+
     try {
         const products = await getProducts()
         await publishStreamEvent(
